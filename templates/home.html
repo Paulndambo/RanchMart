@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="overlay"></div>
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12 text-center text-white">
+                <span class="badge bg-primary mb-3 px-3 py-2 fs-6">Premium Cattle Marketplace</span>
+                <h1 class="display-2 fw-bold mb-4 hero-title">Welcome to RanchMart</h1>
+                <p class="lead mb-4 hero-subtitle">Your trusted source for premium cattle with over 1000+ successful sales</p>
+                <div class="hero-buttons">
+                    <a href="{% url 'animals' %}" class="btn btn-primary btn-lg me-3 px-4">Browse Our Cattle</a>
+                    <a href="#featured" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+                </div>
+                <div class="hero-stats mt-5">
+                    <div class="row justify-content-center">
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="stat-item">
+                                <h3 class="fw-bold">1000+</h3>
+                                <p class="mb-0">Cattle Sold</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="stat-item">
+                                <h3 class="fw-bold">500+</h3>
+                                <p class="mb-0">Happy Customers</p>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-3">
+                            <div class="stat-item">
+                                <h3 class="fw-bold">15+</h3>
+                                <p class="mb-0">Years Experience</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Categories -->
+<section id="featured" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Featured Cattle Categories</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="category-card">
+                    <img src="{% static 'images/dairy.jpg' %}" alt="Dairy Cattle" class="img-fluid">
+                    <div class="category-content">
+                        <h3>Dairy Cattle</h3>
+                        <p>High-producing dairy breeds</p>
+                        <a href="{% url 'animals' %}" class="btn btn-outline-primary">View Dairy Cattle</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card">
+                    <img src="{% static 'images/beef.jpg' %}" alt="Beef Cattle" class="img-fluid">
+                    <div class="category-content">
+                        <h3>Beef Cattle</h3>
+                        <p>Premium beef breeds for meat production</p>
+                        <a href="{% url 'animals' %}" class="btn btn-outline-primary">View Beef Cattle</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card">
+                    <img src="{% static 'images/breeding.jpg' %}" alt="Breeding Stock" class="img-fluid">
+                    <div class="category-content">
+                        <h3>Breeding Stock</h3>
+                        <p>High-quality breeding cattle</p>
+                        <a href="{% url 'animals' %}" class="btn btn-outline-primary">View Breeding Stock</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Why Choose Us</h2>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="feature-box text-center">
+                    <i class="bi bi-shield-check fs-1 text-primary"></i>
+                    <h4 class="mt-3">Quality Assured</h4>
+                    <p>All cattle are health-certified and vaccinated</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-box text-center">
+                    <i class="bi bi-truck fs-1 text-primary"></i>
+                    <h4 class="mt-3">Safe Transport</h4>
+                    <p>Professional cattle transportation services</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-box text-center">
+                    <i class="bi bi-headset fs-1 text-primary"></i>
+                    <h4 class="mt-3">Expert Support</h4>
+                    <p>24/7 livestock specialist assistance</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-box text-center">
+                    <i class="bi bi-award fs-1 text-primary"></i>
+                    <h4 class="mt-3">Premium Breeds</h4>
+                    <p>Top-quality cattle bloodlines</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom CSS -->
+<style>
+    .hero-section {
+        height: 100vh;
+        background: linear-gradient(135deg, #1a365d 0%, #2d5a9e 100%);
+        position: relative;
+        color: white;
+        overflow: hidden;
+    }
+
+    /* Add subtle geometric pattern overlay */
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+        opacity: 0.4;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    /* Ensure content is above the overlay */
+    .hero-section .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-title {
+        letter-spacing: -0.5px;
+        position: relative;
+    }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+        position: relative;
+    }
+
+    /* Update stats styling for solid background */
+    .hero-stats {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .hero-buttons .btn {
+        border-radius: 50px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 12px 30px;
+    }
+
+    .hero-buttons .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: transparent;
+    }
+
+    .stat-item {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .stat-item h3 {
+        font-size: 2.5rem;
+        margin-bottom: 5px;
+        color: #fff;
+    }
+
+    .stat-item p {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+
+    /* Add subtle animation to the background */
+    @keyframes gradientAnimation {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    .hero-section {
+        background-size: 200% 200%;
+        animation: gradientAnimation 15s ease infinite;
+        background: linear-gradient(
+            135deg, 
+            #1a365d 0%, 
+            #2d5a9e 25%, 
+            #1a365d 50%, 
+            #2d5a9e 75%, 
+            #1a365d 100%
+        );
+    }
+
+    .category-card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .category-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .category-content {
+        padding: 1.5rem;
+        background: white;
+    }
+
+    .feature-box {
+        padding: 2rem;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .feature-box:hover {
+        transform: translateY(-5px);
+    }
+</style>
+
+<!-- Custom JavaScript -->
+<script>
+    // Add smooth scrolling to all links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+{% endblock %}

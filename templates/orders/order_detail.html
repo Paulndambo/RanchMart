@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Details - #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">Order #{{ order.id }}</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Order Information</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Order Date:</strong> {{ order.created_at|date:"F j, Y" }}</p>
+                    <p><strong>Order Status:</strong> {{ order.status }}</p>
+                    <p><strong>Total Amount:</strong> {{ order.total_cost }} Ksh</p>
+                </div>
+                <div class="col-md-6">
+                    <h6>Shipping Address:</h6>
+                    <p>
+                        {{ order.user.address }}<br>
+                        {{ order.user.city }}, {{ order.user.county }} {{ order.user.country }}<br>
+                        {{ order.user.country }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Order Items</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'cow-detail' item.animal.id %}">
+                                    {{ item.animal.name }}
+                                </a>
+                            </td>
+                            <td>{{ item.animal.price }} Ksh</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.total_price }} Ksh</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                            <td><strong>{{ order.total_cost }} Ksh</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% if order.status == 'pending' %}
+    <div class="mt-4">
+        <a href="{% url 'payment' order.id %}" class="btn btn-primary">
+            Proceed to Payment
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

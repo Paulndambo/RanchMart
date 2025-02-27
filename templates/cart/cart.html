@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Shopping Cart
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="card-title mb-4">Your Shopping Cart</h2>
+                
+                {% if cart %}
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Animal</th>
+                                    <th scope="col" class="text-center">Price</th>
+                                    <th scope="col" class="text-center">Quantity</th>
+                                    <th scope="col" class="text-center">Total</th>
+                                    <th scope="col" class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                    <tr>
+                                        <td style="min-width: 280px;">
+                                            <div class="d-flex align-items-center gap-3">
+                                                {% if item.animal.image %}
+                                                    <img src="{{ item.animal.image.url }}" alt="{{ item.animal.name }}" 
+                                                         class="rounded-3" style="width: 80px; height: 80px; object-fit: cover;">
+                                                {% endif %}
+                                                <div>
+                                                    <h5 class="mb-1">{{ item.animal.name }}</h5>
+                                                    <p class="text-muted mb-0 d-md-none">{{ item.animal.price }} KES</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center d-none d-md-table-cell">
+                                            <span class="fw-medium">{{ item.animal.price }} KES</span>
+                                        </td>
+                                        <td class="text-center" style="min-width: 150px;">
+                                            <div class="d-flex align-items-center justify-content-center gap-2">
+                                                <a href="{% url 'decrement-quantity' item.id %}" 
+                                                   class="btn btn-sm btn-outline-secondary decrease-qty">
+                                                    <i class="bi bi-dash"></i>
+                                                </a>
+                                                <input type="number" value="{{ item.quantity }}" min="1" 
+                                                       class="form-control form-control-sm text-center" 
+                                                       style="width: 60px;">
+                                                {% if item.quantity < item.animal.quantity %}
+                                                    <a href="{% url 'increment-quantity' item.id %}" 
+                                                       class="btn btn-sm btn-outline-secondary increase-qty">
+                                                        <i class="bi bi-plus"></i>
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="fw-medium">{{ item.total_cost }} KES</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{% url 'remove-from-cart' item.id %}" 
+                                               class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <a href="{% url 'animals' %}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="h5 mb-0">Total:</span>
+                                        <span class="h5 mb-0">{{ cart.total_cost }} KES</span>
+                                    </div>
+                                    {% if cart.total_cost > 0 %}
+                                        <a href="{% url 'checkout' cart.id %}" class="btn btn-success w-100">
+                                            Proceed to Checkout <i class="bi bi-arrow-right ms-2"></i>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'animals' %}" class="btn btn-primary w-100">
+                                            Browse Animals <i class="bi bi-arrow-right ms-2"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-cart-x display-1 text-muted mb-4"></i>
+                        <h3>Your cart is empty</h3>
+                        <p class="text-muted">Browse our collection to add animals to your cart.</p>
+                        <a href="{% url 'animals' %}" class="btn btn-primary mt-3">
+                            <i class="bi bi-shop me-2"></i>Start Shopping
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
