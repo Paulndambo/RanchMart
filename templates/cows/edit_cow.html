@@ -1,0 +1,118 @@
+<!-- Add Cow Modal -->
+<div class="modal fade" id="editCowModal{{ animal.id }}" tabindex="-1" aria-labelledby="addCowModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center" id="addCowModalLabel">Edit Cow</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="{% url 'edit-cow' %}" id="addCowForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="animal_id" name="animal_id" required readonly value="{{ animal.id }}"> 
+            <div class="mb-3">
+              <label for="name" class="form-label fw-bold">Cow Name</label>
+              <input type="text" class="form-control" id="name" name="name" value="{{ animal.name }}" required>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                  <label for="category" class="form-label fw-bold">Category</label>
+                  <select class="form-select" id="category" name="category" required>
+                      <option value="{{ animal.category.id }}">{{ animal.category.name }}</option>
+                      {% for category in categories %}
+                          <option value="{{ category.id }}" {% if animal.category.id == category.id %}selected{% endif %}>{{ category.name }}</option>
+                      {% endfor %}
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="age" class="form-label fw-bold">Age (years)</label>
+                  <input type="number" class="form-control" id="age" name="age" min="0" step="0.1" value="{{ animal.age }}" required>
+                </div>
+                <div class="col">
+                  <label for="weight" class="form-label fw-bold">Weight (kg)</label>
+                  <input type="number" class="form-control" id="weight" name="weight" min="0" step="0.1" value="{{ animal.weight }}" required>
+                </div>
+            </div>
+  
+            <div class="row mb-3">
+              <div class="col">
+                  <label for="gender" class="form-label fw-bold">Gender</label>
+                  <select class="form-select" id="gender" name="gender" required>
+                      <option value="{{ animal.gender }}">{{ animal.gender }}</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                  </select>
+              </div>
+              <div class="col">
+                  <label for="animal_type" class="form-label fw-bold">Animal Type</label>
+                  <select class="form-select" id="animal_type" name="animal_type" required>
+                      <option value="{{ animal.animal_type }}">{{ animal.animal_type }}</option>
+                      <option value="Beef">Beef</option>
+                      <option value="Dairy">Dairy</option>
+                  </select>
+              </div>
+              <div class="col">
+                  <label for="species" class="form-label fw-bold">Breed</label>
+                  <select class="form-select" id="species" name="species" required>
+                      <option value="{{ animal.species }}">{{ animal.species }}</option>
+                      <option value="Holstein">Holstein</option>
+                      <option value="Jersey">Jersey</option>
+                      <option value="Brown Swiss">Brown Swiss</option>
+                      <option value="Guernsey">Guernsey</option>
+                      <option value="Ayrshire">Ayrshire</option>
+                      <option value="Milking Shorthorn">Milking Shorthorn</option>
+                      <option value="Freshian">Freshian</option>
+                      <option value="Red and White">Red and White</option>
+                      <option value="Black and White">Black and White</option>
+                      <option value="Red and Black">Red and Black</option>
+                      <option value="Black and Red">Black and Red</option>
+                      <option value="Other">Other</option>
+                  </select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                  <label for="price" class="form-label fw-bold">Price</label>
+                  <input type="number" class="form-control" id="price" name="price" min="0" step="0.1" value="{{ animal.price }}" required>
+              </div>
+              <div class="col">
+                  <label for="quantity" class="form-label fw-bold">Quantity</label>
+                  <input type="number" class="form-control" id="quantity" name="quantity" min="0" step="1" value="{{ animal.quantity }}" required>
+              </div>
+              <div class="col">
+                  <label for="status" class="form-label fw-bold">Status</label>
+                  <select class="form-select" id="status" name="status" required>
+                    <option value="{{ animal.status }}">{{ animal.status }}</option>
+                    <option value="healthy">Healthy</option>
+                    <option value="sick">Sick</option>
+                    <option value="pregnant">Pregnant</option>
+                  </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                  <label for="image" class="form-label fw-bold">Image</label>
+                  <input type="file" class="form-control" id="image" name="image" value="{{ animal.image }}" required>
+              </div>
+              <div class="col">
+                  <label for="medical_certificate" class="form-label fw-bold">Medical Certificate</label>
+                  <input type="file" class="form-control" id="medical_certificate" name="medical_certificate" value="{{ animal.medical_certificate }}" required>
+              </div>
+            </div>
+            <div class="row-mb-3">
+              <div class="col">
+                  <label for="description" class="form-label fw-bold">Description/Notes</label>
+                  <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+              </div>
+            </div>
+            
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Edit Cow</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

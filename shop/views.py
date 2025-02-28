@@ -61,3 +61,39 @@ def new_cow(request):
             
     return render(request, 'cows/new_cow.html')
 
+
+def edit_cow(request):
+    if request.method == 'POST':
+        animal_id = request.POST.get('animal_id')
+        name = request.POST.get('name')
+        category_id = request.POST.get('category')
+        species = request.POST.get('species')
+        age = request.POST.get('age')
+        weight = request.POST.get('weight')
+        status = request.POST.get('status')
+        description = request.POST.get('description')
+        animal_type = request.POST.get('animal_type')
+        price = request.POST.get('price')
+        image = request.FILES.get('image')
+        medical_certificate = request.FILES.get('medical_certificate')
+        quantity = request.POST.get('quantity')
+        gender = request.POST.get('gender')
+
+        category = Category.objects.get(id=category_id)
+        animal = Animal.objects.get(id=animal_id)
+        animal.name = name
+        animal.category = category
+        animal.species = species
+        animal.age = age
+        animal.weight = weight
+        animal.status = status
+        animal.description = description
+        animal.animal_type = animal_type
+        animal.price = price
+        animal.image = image
+        animal.medical_certificate = medical_certificate
+        animal.quantity = quantity
+        animal.gender = gender
+        animal.save()
+        return redirect('cows')
+    return render(request, 'cows/edit_cow.html')
