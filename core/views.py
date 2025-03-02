@@ -23,20 +23,29 @@ def terms(request):
 
 @login_required
 def dashboard(request):
-    if not request.user.is_superuser:
-        return redirect('user-dashboard')
-
     orders_count = Order.objects.all().count()
     animals_count = Animal.objects.all().count()
     users_count = User.objects.all().count()
     orders = Order.objects.all()[:5]
 
+    animals_sold = OrderItem.objects.all()
+    total_sales = sum(item.total_cost for item in Order.objects.all())
+
+    if not request.user.is_superuser:
+        orders = Order.objects.filter(user=request.user)[:5]
+        animals_count = Animal.objects.filter(owner=request.user).count()
+
+        animals_sold = OrderItem.objects.filter(animal__owner=request.user)
+        total_sales = sum(item.total_cost for item in Order.objects.filter(user=request.user))
+
     context = {
         "orders_count": orders_count,
         "animals_count": animals_count,
         "users_count": users_count,
-        "orders": orders
+        "orders": orders,
+        "total_sales": total_sales
     }
+    print(context)
     return render(request, 'dashboard.html', context)
 
 
