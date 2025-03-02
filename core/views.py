@@ -29,11 +29,13 @@ def dashboard(request):
     orders_count = Order.objects.all().count()
     animals_count = Animal.objects.all().count()
     users_count = User.objects.all().count()
+    orders = Order.objects.all()[:5]
 
     context = {
         "orders_count": orders_count,
         "animals_count": animals_count,
-        "users_count": users_count
+        "users_count": users_count,
+        "orders": orders
     }
     return render(request, 'dashboard.html', context)
 
@@ -48,9 +50,11 @@ def non_admin_dashboard(request):
 
     context = {
         "orders": orders,
-        "animals": animals,
+        "animals_count": animals.count(),
+        "orders_count": orders.count(),
         "my_animal_sales": my_animal_sales,
         "total_sales": total_sales,
         "sales_count": sales_count
     }
+    print(context)
     return render(request, 'user_dashboard.html', context)

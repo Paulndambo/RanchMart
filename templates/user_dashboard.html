@@ -149,6 +149,7 @@
                         Orders
                     </a>
                 </li>
+
             </ul>
         </nav>
 
@@ -169,7 +170,7 @@
                         <div class="card stat-card bg-white">
                             <div class="card-body position-relative">
                                 <h5 class="card-title">Total Products</h5>
-                                <p class="card-text display-5">567</p>
+                                <p class="card-text display-5">{{ animals_count }}</p>
                                 <div class="stat-icon">
                                     <i class="fas fa-box text-success"></i>
                                 </div>
@@ -179,8 +180,19 @@
                     <div class="col-md-4">
                         <div class="card stat-card bg-white">
                             <div class="card-body position-relative">
-                                <h5 class="card-title">Total Orders</h5>
-                                <p class="card-text display-5">892</p>
+                                <h5 class="card-title">Total Sales</h5>
+                                <p class="card-text display-5">{{ total_sales }}</p>
+                                <div class="stat-icon">
+                                    <i class="fas fa-money-bill text-warning"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card stat-card bg-white">
+                            <div class="card-body position-relative">
+                                <h5 class="card-title">Cows Sold</h5>
+                                <p class="card-text display-5">{{ sales_count }}</p>
                                 <div class="stat-icon">
                                     <i class="fas fa-shopping-cart text-warning"></i>
                                 </div>
@@ -199,28 +211,29 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Order ID</th>
+                                                <th>ID</th>
                                                 <th>Customer</th>
-                                                <th>Product</th>
                                                 <th>Amount</th>
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            {% for order in orders %}
                                             <tr>
-                                                <td>#12345</td>
-                                                <td>John Doe</td>
-                                                <td>Product A</td>
-                                                <td>99.99</td>
-                                                <td><span class="badge bg-success">Completed</span></td>
+                                                <td>#{{ order.id }}</td>
+                                                <td>{{ order.user.first_name }} {{ order.user.last_name }}</td>
+                                                <td>{{ order.total_cost }}</td>
+                                                <td>
+                                                    {% if order.status == 'Completed' %}
+                                                        <span class="badge bg-success">{{ order.status }}</span>
+                                                    {% elif order.status == 'Pending' %}
+                                                        <span class="badge bg-warning">{{ order.status }}</span>
+                                                    {% else %}
+                                                        <span class="badge bg-danger">{{ order.status }}</span>
+                                                    {% endif %}
+                                                </td>
                                             </tr>
-                                            <tr>
-                                                <td>#12346</td>
-                                                <td>Jane Smith</td>
-                                                <td>Product B</td>
-                                                <td>149.99</td>
-                                                <td><span class="badge bg-warning">Pending</span></td>
-                                            </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>

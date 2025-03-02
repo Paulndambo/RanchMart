@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .receipt-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .receipt-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .receipt-details {
+        margin-bottom: 20px;
+    }
+    .receipt-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    .receipt-table th, .receipt-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    .receipt-table th {
+        background-color: #f5f5f5;
+    }
+    .receipt-total {
+        text-align: right;
+        font-weight: bold;
+        margin-top: 20px;
+    }
+    @media print {
+        .no-print {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div id="receipt" class="receipt-container">
+        <div class="receipt-header">
+            <h2>Order Receipt</h2>
+            <p>Order #{{ order.id }}</p>
+            <p>Date: {{ order.created_at|date:"F d, Y" }}</p>
+        </div>
+
+        <div class="receipt-details">
+            <h4>Customer Details</h4>
+            <p>Name: {{ order.user.name }}</p>
+            <p>Phone: {{ order.user.phone_number }}</p>
+            <p>Email: {{ order.user.email }}</p>
+        </div>
+
+        <div class="receipt-items">
+            <h4>Order Items</h4>
+            <table class="receipt-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.animal.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ item.animal.price }}</td>
+                        <td>${{ item.total_price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="receipt-total">
+            <p>Subtotal: ${{ order.total_cost }}</p>
+            {% if order.tax %}
+            <p>Tax: ${{ order.tax }}</p>
+            {% endif %}
+            <h4>Total: ${{ order.total_cost }}</h4>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function generatePDF() {
+    // Configure html2pdf options
+    const options = {
+        margin: 1,
+        filename: 'order-receipt-{{ order.id }}.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    // Get the receipt element
+    const element = document.getElementById('receipt');
+
+    // Generate PDF
+    html2pdf().set(options).from(element).save().then(function() {
+        // Redirect to order details page after PDF is generated
+        window.location.href = "{% url 'order-detail' order.id %}";
+    });
+}
+
+generatePDF();
+</script>
+{% endblock %}

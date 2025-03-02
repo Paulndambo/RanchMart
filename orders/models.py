@@ -12,6 +12,7 @@ STATUS_CHOICES = [
     ('Shipped', 'Shipped'),
     ('Delivered', 'Delivered'),
     ('Cancelled', 'Cancelled'),
+    ('Partially Paid', 'Partially Paid'),
 ]
 class Cart(AbstractBaseModel):
     user = models.OneToOneField("users.User", on_delete=models.CASCADE, related_name='carts')
@@ -36,10 +37,14 @@ class CartItem(AbstractBaseModel):
 class Order(AbstractBaseModel):
     user = models.ForeignKey("users.User", on_delete=models.CASCADE)
     total_cost = models.DecimalField(max_digits=100, decimal_places=2)
+    amount_paid = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     status = models.CharField(max_length=255, choices=STATUS_CHOICES)
 
     def __str__(self):
         return self.user.username
+
+    def remaining_balance(self):
+        return self.total_cost - self.amount_paid
 
 
 class OrderItem(AbstractBaseModel):

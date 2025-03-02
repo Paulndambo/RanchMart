@@ -17,6 +17,8 @@ def orders(request):
     if not user.is_superuser:
         orders = Order.objects.filter(user=user)
 
+    print(f"Username: {user.username}, Is Superuser: {user.is_superuser}")
+
     context = {
         "orders": orders
     }
@@ -124,6 +126,12 @@ def order_detail(request, order_id):
     order = Order.objects.get(id=order_id)
     items = OrderItem.objects.filter(order=order)
     return render(request, 'orders/order_detail.html', {'order': order, 'items': items})
+
+
+def print_receipt(request, order_id):
+    order = Order.objects.get(id=order_id)
+    items = OrderItem.objects.filter(order=order)
+    return render(request, 'orders/order_receipt.html', {'order': order, 'items': items})
 
 
 @login_required

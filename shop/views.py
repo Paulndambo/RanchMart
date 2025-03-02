@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
-
+from django.contrib.auth.decorators import login_required
 from shop.models import Animal, Category
 # Create your views here.
+
 def animals(request):
+    user = request.user
     animals = Animal.objects.all()
     categories = Category.objects.all()
     return render(request, 'animals.html', {'animals': animals, 'categories': categories})
@@ -12,10 +14,19 @@ def animal_detail(request, animal_id):
     return render(request, 'animal_detail.html', {'animal': animal})
 
 
+@login_required
 def cow_list(request):
+    user = request.user
     cows = Animal.objects.all()
     categories = Category.objects.all()
-    return render(request, 'cows/cows.html', {'cows': cows, 'categories': categories})
+    if not user.is_superuser:
+        cows = Animal.objects.filter(owner=user)
+
+    context = {
+        'cows': cows,
+        'categories': categories
+    }
+    return render(request, 'cows/cows.html', context)
 
 
 def cow_detail(request, animal_id):
@@ -23,6 +34,7 @@ def cow_detail(request, animal_id):
     return render(request, 'cows/cow_detail.html', {'animal': animal})
 
 
+@login_required
 def new_cow(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -42,6 +54,7 @@ def new_cow(request):
         category = Category.objects.get(id=category_id)
         
         animal = Animal.objects.create(
+            owner=request.user,
             name=name, 
             category=category, 
             age=age, 
