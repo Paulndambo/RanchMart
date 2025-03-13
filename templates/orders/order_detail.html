@@ -21,9 +21,15 @@
                         <i class="fas fa-money-bill"></i> Record Payment
                     </a>
                 {% endif %}
+                {% if order.status != 'Payment Confirmed' and order.receiver == request.user %}
+                    <a data-bs-toggle="modal" data-bs-target="#confirmPaymentModal{{ order.id }}" class="btn btn-primary">
+                        <i class="fas fa-check-circle"></i> Confirm Payment
+                    </a>
+                {% endif %}
             </div>
         </div>
         {% include 'payments/new_payment.html' %}
+        {% include 'orders/confirm_payment.html' %}
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">

@@ -19,19 +19,19 @@
                     <div class="row justify-content-center">
                         <div class="col-md-3 col-6 mb-3">
                             <div class="stat-item">
-                                <h3 class="fw-bold">1000+</h3>
+                                <h3 class="fw-bold">{{ cattle_sold }}</h3>
                                 <p class="mb-0">Cattle Sold</p>
                             </div>
                         </div>
                         <div class="col-md-3 col-6 mb-3">
                             <div class="stat-item">
-                                <h3 class="fw-bold">500+</h3>
+                                <h3 class="fw-bold">{{ customers_total }}</h3>
                                 <p class="mb-0">Happy Customers</p>
                             </div>
                         </div>
                         <div class="col-md-3 col-6 mb-3">
                             <div class="stat-item">
-                                <h3 class="fw-bold">15+</h3>
+                                <h3 class="fw-bold">1+</h3>
                                 <p class="mb-0">Years Experience</p>
                             </div>
                         </div>
@@ -122,13 +122,14 @@
 <style>
     .hero-section {
         height: 100vh;
-        background: linear-gradient(135deg, #1a365d 0%, #2d5a9e 100%);
+        /* Change to a more earthy, pastoral gradient */
+        background: linear-gradient(135deg, #2c4a1d 0%, #436b24 100%);
         position: relative;
         color: white;
         overflow: hidden;
     }
 
-    /* Add subtle geometric pattern overlay */
+    /* Add a subtle hay/grass texture overlay */
     .hero-section::before {
         content: '';
         position: absolute;
@@ -136,8 +137,8 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-        opacity: 0.4;
+        background: url("{% static 'images/noise-texture.png' %}");
+        opacity: 0.1;
         pointer-events: none;
         z-index: 1;
     }
@@ -151,6 +152,7 @@
     .hero-title {
         letter-spacing: -0.5px;
         position: relative;
+        font-family: 'Georgia', serif; /* More rustic font */
     }
 
     .hero-subtitle {
@@ -158,27 +160,25 @@
         position: relative;
     }
 
-    /* Update stats styling for solid background */
+    /* Update stats styling for a barn-wood look */
     .hero-stats {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(44, 74, 29, 0.8);
         backdrop-filter: blur(10px);
-        border-radius: 15px;
+        border-radius: 8px;
         padding: 20px;
         margin-top: 50px;
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    .hero-buttons .btn {
-        border-radius: 50px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        padding: 12px 30px;
+    .hero-buttons .btn-primary {
+        background-color: #8b4513; /* Saddle brown */
+        border-color: #8b4513;
     }
 
-    .hero-buttons .btn-outline-light:hover {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: transparent;
+    .hero-buttons .btn-primary:hover {
+        background-color: #723a10;
+        border-color: #723a10;
     }
 
     .stat-item {
@@ -197,7 +197,7 @@
         opacity: 0.9;
     }
 
-    /* Add subtle animation to the background */
+    /* Update background animation for a more natural feel */
     @keyframes gradientAnimation {
         0% {
             background-position: 0% 50%;
@@ -212,22 +212,25 @@
 
     .hero-section {
         background-size: 200% 200%;
-        animation: gradientAnimation 15s ease infinite;
+        animation: gradientAnimation 20s ease infinite;
         background: linear-gradient(
             135deg, 
-            #1a365d 0%, 
-            #2d5a9e 25%, 
-            #1a365d 50%, 
-            #2d5a9e 75%, 
-            #1a365d 100%
+            #2c4a1d 0%, 
+            #436b24 25%, 
+            #2c4a1d 50%, 
+            #436b24 75%, 
+            #2c4a1d 100%
         );
     }
 
+    /* Style category cards like wooden signs */
     .category-card {
-        border-radius: 10px;
+        border-radius: 8px;
         overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         transition: transform 0.3s ease;
+        background: #f8f4e9; /* Light cream background */
+        border: 1px solid #dcd2bc;
     }
 
     .category-card:hover {
@@ -236,19 +239,52 @@
 
     .category-content {
         padding: 1.5rem;
-        background: white;
+        background: #f8f4e9;
+        border-top: 2px solid #dcd2bc;
     }
 
     .feature-box {
         padding: 2rem;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background: #f8f4e9;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease;
+        border: 1px solid #dcd2bc;
     }
 
     .feature-box:hover {
         transform: translateY(-5px);
+    }
+
+    /* Add decorative elements */
+    .section-title {
+        position: relative;
+        display: inline-block;
+        padding: 0 15px;
+    }
+
+    .section-title::before,
+    .section-title::after {
+        content: '★';
+        color: #8b4513;
+        position: relative;
+        top: -2px;
+        margin: 0 10px;
+    }
+
+    /* Make feature boxes look like wooden panels */
+    .feature-box {
+        background: linear-gradient(45deg, #f8f4e9, #f0e9d8);
+        border: 2px solid #dcd2bc;
+    }
+
+    .feature-box i {
+        color: #8b4513 !important; /* Override Bootstrap's primary color */
+    }
+
+    /* Add a subtle texture to the light background sections */
+    .bg-light {
+        background: #f8f4e9 url("{% static 'images/noise-texture.png' %}") !important;
     }
 </style>
 

@@ -7,7 +7,13 @@ from users.models import User
 
 # Create your views here.
 def home(request):
-    return render(request, 'home.html')
+    cattle_sold = OrderItem.objects.all().count()
+    customers_total = User.objects.filter(role='Customer').filter(is_superuser=False).count()
+    context = {
+        'cattle_sold': cattle_sold,
+        'customers_total': customers_total
+    }
+    return render(request, 'home.html', context)
 
 def about(request):
     return render(request, 'about.html')

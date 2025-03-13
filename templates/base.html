@@ -18,44 +18,78 @@
             top: -8px;
             left: -5px;
         }
+        
+        /* Add new navbar styles */
+       
+        
+        .navbar-brand {
+            color: white !important; /* Wheat yellow */
+            font-family: 'Georgia', serif;
+            font-size: 1.5rem;
+        }
+        
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-family: 'Georgia', serif;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: #F4D03F !important;
+        }
+        
+        .navbar-toggler {
+            border-color: #fff;
+        }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+    <nav class="navbar navbar-expand-lg bg-success shadow-sm fixed-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="/">
-                RanchMart
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-house-fill me-2"></i>RanchMart
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cart' %}">
                             <i class="bi bi-cart3"></i>
-                            <span class="badge bg-primary rounded-pill cart-count">{{ user.cart_items }}</span>
+                            <span class="badge bg-warning text-dark rounded-pill cart-count">{{ user.cart_items }}</span>
                         </a>
                     </li>
                     {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'dashboard' %}">
-                                <i class="bi bi-person"></i> Account
+                                <i class="bi bi-person-circle"></i> Account
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                            <a class="nav-link" href="{% url 'logout' %}">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/login">Login</a>
+                            <a class="nav-link" href="{% url 'login' %}">
+                                <i class="bi bi-box-arrow-right"></i> Login
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/register">Register</a>
+                            <a class="nav-link" href="{% url 'register' %}">
+                                <i class="bi bi-person-plus-fill"></i> Register
+                            </a>
                         </li>
+                       
                     {% endif %}
                 </ul>
             </div>
@@ -70,25 +104,39 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-5">
+    <footer class="bg-success text-white py-4 mt-5">
         <div class="container">
             <div class="row">
-                <div class="col-md-4">
-                    <h5>RanchMart</h5>
-                    <p>Your trusted source for quality farm animals</p>
+                <div class="col-md-4 mb-3">
+                    <h5><i class="bi bi-house-fill"></i> RanchMart</h5>
+                    <p class="mb-2">From our pastures to your paddocks</p>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter"></i></a>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <h5>Quick Links</h5>
+                <div class="col-md-4 mb-3">
+                    <h5><i class="bi bi-signpost-2"></i> Ranch Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="/about" class="text-white">About Us</a></li>
-                        <li><a href="/contact" class="text-white">Contact</a></li>
-                        <li><a href="/terms" class="text-white">Terms & Conditions</a></li>
+                        <li><a href="/about" class="text-white text-decoration-none"><i class="bi bi-info-circle"></i> About Our Ranch</a></li>
+                        <li><a href="/contact" class="text-white text-decoration-none"><i class="bi bi-envelope"></i> Contact the Farmer</a></li>
+                        <li><a href="/terms" class="text-white text-decoration-none"><i class="bi bi-file-text"></i> Ranch Rules</a></li>
+                        <li><a href="/blog" class="text-white text-decoration-none"><i class="bi bi-newspaper"></i> Farm Blog</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
-                    <h5>Contact Us</h5>
-                    <p>Email: info@ranchmart.com<br>
-                    Phone: (555) 123-4567</p>
+                    <h5><i class="bi bi-geo-alt"></i> Visit The Ranch</h5>
+                    <p><i class="bi bi-envelope-fill"></i> ranch@ranchmart.com<br>
+                    <i class="bi bi-telephone-fill"></i> (555) 123-4567<br>
+                    <i class="bi bi-clock"></i> Mon-Sat: 7AM - 6PM<br>
+                    <i class="bi bi-geo-fill"></i> 1234 Pasture Lane<br>
+                    Green Meadows, FM 12345</p>
+                </div>
+            </div>
+            <div class="row mt-3 border-top pt-3">
+                <div class="col text-center">
+                    <small>© 2024 RanchMart - Cultivating Quality Since 2020 <i class="bi bi-flower1"></i></small>
                 </div>
             </div>
         </div>

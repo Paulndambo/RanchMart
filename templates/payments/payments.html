@@ -7,12 +7,28 @@
 <div class="container my-4">
     <h2 class="mb-4">Payment History</h2>
 
+    <!-- Add search form -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <form method="get" class="d-flex">
+                <input type="text" name="search" class="form-control me-2" 
+                       placeholder="Search by order number or amount" 
+                       value="{{ request.GET.search|default:'' }}">
+                <button type="submit" class="btn btn-primary">Search</button>
+                {% if request.GET.search %}
+                    <a href="{% url 'payments' %}" class="btn btn-outline-secondary ms-2">Clear</a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
     {% if payments %}
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Customer</th>
                         <th>Date</th>
                         <th>Amount</th>
                         <th>Order</th>
@@ -23,8 +39,9 @@
                     {% for payment in payments %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
+                            <td>{{ payment.order.user.name }}</td>
                             <td>{{ payment.created_at|date:"M d, Y" }}</td>
-                            <td>${{ payment.amount|floatformat:2 }}</td>
+                            <td>{{ payment.amount|floatformat:2 }} KES</td>
                             
                             <td>
                                 {% if payment.order %}
@@ -47,28 +64,50 @@
                 <ul class="pagination justify-content-center">
                     {% if page_obj.has_previous %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                            <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page=1">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
                         </li>
                     {% endif %}
 
                     {% for num in page_obj.paginator.page_range %}
-                        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                        </li>
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
                     {% endfor %}
 
                     {% if page_obj.has_next %}
                         <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
                         </li>
                     {% endif %}
                 </ul>
             </nav>
+
+            <div class="text-center mt-2">
+                <small class="text-muted">
+                    Showing page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </small>
+            </div>
         {% endif %}
 
     {% else %}
         <div class="alert alert-info">
-            No payments found.
+            {% if request.GET.search %}
+                No payments found matching your search.
+            {% else %}
+                No payments found.
+            {% endif %}
         </div>
     {% endif %}
 </div>

@@ -13,6 +13,7 @@ STATUS_CHOICES = [
     ('Delivered', 'Delivered'),
     ('Cancelled', 'Cancelled'),
     ('Partially Paid', 'Partially Paid'),
+    ('Payment Confirmed', 'Payment Confirmed'),
 ]
 class Cart(AbstractBaseModel):
     user = models.OneToOneField("users.User", on_delete=models.CASCADE, related_name='carts')
@@ -39,6 +40,7 @@ class Order(AbstractBaseModel):
     total_cost = models.DecimalField(max_digits=100, decimal_places=2)
     amount_paid = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     status = models.CharField(max_length=255, choices=STATUS_CHOICES)
+    receiver = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name='ordersreceiver', null=True, blank=True)
 
     def __str__(self):
         return self.user.username

@@ -10,9 +10,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        :root {
+            --ranch-green: #2C5530;
+            --ranch-brown: #8B4513;
+            --ranch-tan: #DEB887;
+            --ranch-light: #F5DEB3;
+            --ranch-dark: #1C3320;
+        }
+
         .wrapper {
             display: flex;
             width: 100%;
+            background-color: var(--ranch-light);
         }
 
         #sidebar {
@@ -29,27 +38,37 @@
 
         #content {
             width: 100%;
-            padding: 0;
+            padding: 20px;
+            background-color: var(--ranch-light);
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B4513' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            min-height: 100vh;
+            position: relative;
         }
 
         .sidebar-header {
             padding: 20px;
-            background: #343a40;
+            background: var(--ranch-green);
         }
 
         #sidebar ul li a {
             text-decoration: none;
             transition: all 0.3s;
+            background-color: var(--ranch-green);
+            padding: 15px 20px;
+            color: rgba(255,255,255,0.9);
+            border-left: 3px solid transparent;
         }
 
         #sidebar ul li a:hover {
-            background: #454d55;
+            background: var(--ranch-brown);
         }
 
         body {
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background-color: var(--ranch-light);
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
@@ -69,55 +88,114 @@
         .stat-card {
             transition: transform 0.2s, box-shadow 0.2s;
             border: none;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background-color: rgba(255, 255, 255, 0.9);
+            border-left: 4px solid var(--ranch-brown);
+            position: relative;
+            overflow: hidden;
         }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)),
+                url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%238B4513' fill-opacity='0.05'%3E%3Cpath d='M0 0h20v20H0V0zm10 17.5a7.5 7.5 0 100-15 7.5 7.5 0 000 15z'/%3E%3C/g%3E%3C/svg%3E");
+            z-index: 0;
         }
 
         .stat-card .card-body {
             padding: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(139, 69, 19, 0.15);
         }
 
         .stat-card .card-title {
-            color: #6c757d;
-            font-size: 0.9rem;
+            color: var(--ranch-dark);
+            font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            font-weight: 600;
         }
 
         .stat-card .card-text {
-            color: #2c3e50;
-            font-weight: 600;
+            color: var(--ranch-brown);
+            font-weight: 700;
+            font-size: 1.5rem;
             margin-bottom: 0;
         }
 
         .stat-icon {
-            font-size: 2rem;
-            opacity: 0.2;
+            font-size: 2.5rem;
+            color: var(--ranch-brown);
+            opacity: 0.15;
             position: absolute;
             right: 1rem;
             bottom: 1rem;
-        }
-
-        #sidebar ul li a {
-            padding: 15px 20px;
-            color: rgba(255,255,255,0.8);
-            border-left: 3px solid transparent;
+            transform: rotate(-15deg);
         }
 
         #sidebar ul li a:hover {
-            background: #454d55;
+            background: var(--ranch-brown);
             color: white;
-            border-left: 3px solid #007bff;
+            border-left: 3px solid var(--ranch-tan);
         }
 
         .active-link {
-            background: #454d55;
-            border-left: 3px solid #007bff !important;
+            background: var(--ranch-brown) !important;
+            border-left: 3px solid var(--ranch-tan) !important;
+        }
+
+        /* Add a subtle grain texture to the background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #reportsSubmenu {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        #reportsSubmenu a {
+            padding-left: 40px;
+            font-size: 0.9em;
+            background-color: transparent;
+        }
+
+        #reportsSubmenu a:hover {
+            background-color: var(--ranch-brown);
+        }
+
+        .fa-chevron-down {
+            transition: transform 0.3s;
+        }
+
+        [aria-expanded="true"] .fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        /* Add specific styling for regular menu items to maintain their layout */
+        #sidebar > ul > li > a:not([data-bs-toggle="collapse"]) {
+            display: flex;
+            align-items: center;
         }
     </style>
 </head>
@@ -126,43 +204,79 @@
         <!-- Sidebar -->
         <nav id="sidebar" class="bg-dark">
             <div class="sidebar-header">
-                <h3 class="text-white mb-0">RanchMart</h3>
+                <h3 class="text-white mb-0">
+                    <i class="fas fa-cow me-2"></i>
+                    <a href="/" style="text-decoration: none; color: white;" class="text-white">RanchMart</a>
+                </h3>
             </div>
 
             <ul class="list-unstyled components">
                 <li>
                     <a href="{% url 'dashboard' %}" class="d-flex align-items-center text-white p-3 active-link">
-                        <i class="fas fa-tachometer-alt me-2"></i>
+                        <i class="fas fa-farm me-2"></i>
                         Dashboard
                     </a>
                 </li>
                 {% if request.user.is_superuser %}
                 <li>
                     <a href="{% url 'users' %}" class="d-flex align-items-center text-white p-3">
-                        <i class="fas fa-users me-2"></i>
+                        <i class="fas fa-users-cowboy me-2"></i>
                         Users
                     </a>
                 </li>
                 {% endif %}
                 <li>
                     <a href="{% url 'cows' %}" class="d-flex align-items-center text-white p-3">
-                        <i class="fas fa-box me-2"></i>
+                        <i class="fas fa-cow me-2"></i>
                         Cows
                     </a>
                 </li>
                 <li>
                     <a href="{% url 'orders' %}" class="d-flex align-items-center text-white p-3">
-                        <i class="fas fa-shopping-cart me-2"></i>
+                        <i class="fas fa-clipboard-list me-2"></i>
                         Orders
                     </a>
                 </li>
                 <li>
                     <a href="{% url 'payments' %}" class="d-flex align-items-center text-white p-3">
-                        <i class="fas fa-money-bill me-2"></i>
+                        <i class="fas fa-hand-holding-dollar me-2"></i>
                         Payments
                     </a>
                 </li>
+                <li>
+                    <a href="#reportsSubmenu" data-bs-toggle="collapse" class="d-flex align-items-center text-white p-3">
+                        <i class="fas fa-file-alt me-2"></i>
+                        Reports
+                        <i class="fas fa-chevron-down ms-auto"></i>
+                    </a>
+                    <ul class="collapse list-unstyled" id="reportsSubmenu">
+                        <li>
+                            <a href="{% url 'sales-report' %}" class="d-flex align-items-center text-white p-3 ps-5">
+                                <i class="fas fa-chart-line me-2"></i>
+                                Sales Report
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'inventory-report' %}" class="d-flex align-items-center text-white p-3 ps-5">
+                                <i class="fas fa-warehouse me-2"></i>
+                                Inventory Report
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'financial-report' %}" class="d-flex align-items-center text-white p-3 ps-5">
+                                <i class="fas fa-dollar-sign me-2"></i>
+                                Financial Report
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
+                <li>
+                    <a href="{% url 'logout' %}" class="d-flex align-items-center text-white p-3">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        Logout
+                    </a>
+                </li>
             </ul>
         </nav>
 

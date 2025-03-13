@@ -1,0 +1,28 @@
+<!-- Add Cow Modal -->
+<div class="modal fade" id="confirmPaymentModal{{ order.id }}" tabindex="-1" aria-labelledby="addPaymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center" id="addPaymentModalLabel">Confirm Payment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="{% url 'confirm-payment' %}" id="addPaymentForm" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="order_id" id="order_id" value="{{ order.id }}">
+            <div class="row mb-3">
+                <div class="col">
+                  <p>Are you sure you want to confirm this order has been fully paid?</p>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Confirm Payment</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

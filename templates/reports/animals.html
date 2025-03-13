@@ -1,0 +1,110 @@
+{% extends 'dashboard_base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Inventory Report</h2>
+        <a href="?{% if request.GET.species %}species={{ request.GET.species }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}{% if request.GET.age_range %}age_range={{ request.GET.age_range }}&{% endif %}export=csv" 
+           class="btn btn-success">
+            <i class="fas fa-file-csv"></i>
+        </a>
+    </div>
+
+    <!-- Filters Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label for="species" class="form-label">Species</label>
+                    <select name="species" id="species" class="form-select">
+                        <option value="">All Species</option>
+                        {% for species in species_list %}
+                            <option value="{{ species }}" {% if selected_species == species %}selected{% endif %}>
+                                {{ species }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select name="status" id="status" class="form-select">
+                        <option value="">All Statuses</option>
+                        {% for status in animal_statuses %}
+                            <option value="{{ status }}" {% if selected_status == status %}selected{% endif %}>
+                                {{ status }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="age_range" class="form-label">Age Range</label>
+                    <select name="age_range" id="age_range" class="form-select">
+                        <option value="">All Ages</option>
+                        {% for value, label in age_ranges %}
+                            {% if value != 'all' %}
+                                <option value="{{ value }}" {% if selected_age_range == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                    {% if request.GET %}
+                        <a href="{% url 'inventory-report' %}" class="btn btn-secondary ms-2">
+                            <i class="fas fa-refresh"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Animals Table -->
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Species</th>
+                    <th>Age</th>
+                    <th>Status</th>
+                    <th>Price</th>
+                    <th>Added Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for animal in animals %}
+                <tr>
+                    <td>{{ animal.id }}</td>
+                    <td>{{ animal.name }}</td>
+                    <td>{{ animal.species }}</td>
+                    <td>{{ animal.age }}</td>
+                    <td>
+                        <span class="badge {% if animal.status == 'Available' %}bg-success
+                                         {% elif animal.status == 'Sold' %}bg-danger
+                                         {% elif animal.status == 'Reserved' %}bg-warning
+                                         {% else %}bg-secondary{% endif %}">
+                            {{ animal.status }}
+                        </span>
+                    </td>
+                    <td>${{ animal.price }}</td>
+                    <td>{{ animal.added_date|date:"Y-m-d" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">No animals found matching the criteria.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

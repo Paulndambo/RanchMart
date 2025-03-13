@@ -33,6 +33,18 @@
         font-weight: bold;
         margin-top: 20px;
     }
+    .receipt-logo {
+        max-width: 200px;
+        margin-bottom: 20px;
+    }
+    .receipt-footer {
+        margin-top: 40px;
+        text-align: center;
+        border-top: 1px solid #ddd;
+        padding-top: 20px;
+        font-size: 0.9em;
+        color: #666;
+    }
     @media print {
         .no-print {
             display: none;
@@ -45,6 +57,7 @@
 <div class="container mt-4">
     <div id="receipt" class="receipt-container">
         <div class="receipt-header">
+            <img src="{% static 'images/logo.png' %}" alt="Company Logo" class="receipt-logo">
             <h2>Order Receipt</h2>
             <p>Order #{{ order.id }}</p>
             <p>Date: {{ order.created_at|date:"F d, Y" }}</p>
@@ -87,6 +100,13 @@
             <p>Tax: ${{ order.tax }}</p>
             {% endif %}
             <h4>Total: ${{ order.total_cost }}</h4>
+        </div>
+
+        <div class="receipt-footer">
+            <p>Thank you for your business!</p>
+            <p>© {% now "Y" %} Your Company Name. All rights reserved.</p>
+            <p>123 Business Street, City, Country</p>
+            <p>Contact: support@yourcompany.com | +1 234 567 8900</p>
         </div>
     </div>
 </div>

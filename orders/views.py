@@ -1,5 +1,6 @@
 from decimal import Decimal
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
@@ -28,15 +29,23 @@ def orders(request):
 @login_required
 def add_to_cart(request, animal_id):
     animal = Animal.objects.get(id=animal_id)
-    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart = Cart.objects.get(user=request.user)
 
-    item = CartItem.objects.filter(cart=cart, animal=animal).first()
-    if item:
-        item.quantity += 1
-        item.save()
+    # Get existing cart items
+    existing_items = CartItem.objects.filter(cart=cart)
+    
+    # If there's an existing item with the same animal, increment quantity
+    existing_item = existing_items.filter(animal=animal).first()
+    if existing_item:
+        existing_item.quantity += 1
+        cart.total_cost += Decimal(animal.price)
+        existing_item.save()
     else:
+        # If there's a different item, remove it and create new one
+        existing_items.delete()
         CartItem.objects.create(cart=cart, animal=animal, quantity=1)
-    cart.total_cost += Decimal(animal.price)
+        cart.total_cost = Decimal(animal.price)  # Reset total cost for new item
+    
     cart.save()
     messages.success(request, f"{animal.name} added to cart")
     return redirect('cart')
@@ -45,18 +54,27 @@ def add_to_cart(request, animal_id):
 def add_to_cart_from_animal_detail(request):
     if request.method == 'POST':
         animal_id = request.POST.get('animal_id')
-        quantity = request.POST.get('quantity')
+        quantity = int(request.POST.get('quantity', 1))
         try:
             animal = Animal.objects.get(id=animal_id)
             cart, _ = Cart.objects.get_or_create(user=request.user)
-
-            item = CartItem.objects.filter(cart=cart, animal=animal).first()
-            if item:
-                item.quantity += int(quantity)
-                item.save()
-            else:   
+            
+            # Get all existing items
+            existing_items = CartItem.objects.filter(cart=cart)
+            
+            # Check if the same animal is already in cart
+            existing_item = existing_items.filter(animal=animal).first()
+            if existing_item:
+                # If same animal, increment quantity
+                existing_item.quantity += quantity
+                cart.total_cost += Decimal(animal.price) * Decimal(quantity)
+                existing_item.save()
+            else:
+                # If different animal, remove existing items and create new one
+                existing_items.delete()
                 CartItem.objects.create(cart=cart, animal=animal, quantity=quantity)
-            cart.total_cost += Decimal(quantity) * Decimal(animal.price)
+                cart.total_cost = Decimal(animal.price) * Decimal(quantity)  # Reset total cost
+            
             cart.save()
             messages.success(request, f"{animal.name} added to cart")
             return redirect('animal-detail', animal_id=animal_id)
@@ -107,7 +125,8 @@ def checkout(request, cart_id):
     order = Order.objects.create(
         user=request.user,
         total_cost=cart.total_cost,
-        status="Pending"
+        status="Pending",
+
     )
 
     for item in items:
@@ -116,15 +135,21 @@ def checkout(request, cart_id):
             animal=item.animal,
             quantity=item.quantity
         )
+        item.order.receiver = item.animal.owner
+        item.order.save()
 
     cart.delete()
     messages.success(request, "Order placed successfully")
-    return redirect("dashboard")
+    return redirect(reverse('order-detail', args=[order.id]))
    
 
+@login_required
 def order_detail(request, order_id):
+    user = request.user
     order = Order.objects.get(id=order_id)
     items = OrderItem.objects.filter(order=order)
+
+
     return render(request, 'orders/order_detail.html', {'order': order, 'items': items})
 
 
@@ -142,3 +167,14 @@ def cart(request):
     print(items)
     print("**************Cart Items**************")
     return render(request, 'cart/cart.html', {'items': items, "cart": cart})
+
+
+@login_required
+def confirm_payment(request):
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        order = Order.objects.get(id=order_id)
+        order.status = 'Payment Confirmed'
+        order.save()
+        return redirect(reverse('order-detail', args=[order_id]))
+    return render(request, 'orders/confirm_payment.html')
