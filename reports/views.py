@@ -131,11 +131,11 @@ def financial_report(request):
     
     if start_date:
         start_date = datetime.strptime(start_date, '%Y-%m-%d')
-        payments = payments.filter(payment_date__gte=start_date)
+        payments = payments.filter(created_at__date__gte=start_date)
     
     if end_date:
         end_date = datetime.strptime(end_date, '%Y-%m-%d')
-        payments = payments.filter(payment_date__lte=end_date)
+        payments = payments.filter(created_at__date__lte=end_date)
     
     if payment_method:
         payments = payments.filter(payment_method=payment_method)

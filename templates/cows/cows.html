@@ -16,11 +16,15 @@
                     <span class="input-group-text bg-light">
                         <i class="fas fa-search text-muted"></i>
                     </span>
-                    <input type="text" 
-                            class="form-control border-start-0" 
-                            placeholder="Search by name, breed, or ID..." 
-                            id="searchInput"
-                            autocomplete="off">
+                    <form method="GET" class="flex-grow-1">
+                        <input type="text" 
+                                name="search"
+                                class="form-control border-start-0" 
+                                placeholder="Search by name, breed, or ID..." 
+                                id="searchInput"
+                                value="{{ request.GET.search|default:'' }}"
+                                autocomplete="off">
+                    </form>
                     <span class="input-group-text bg-light d-none" id="searchSpinner">
                         <div class="spinner-border spinner-border-sm text-primary" role="status">
                             <span class="visually-hidden">Loading...</span>
@@ -88,5 +92,50 @@
         {% endif %}
     </div>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const cowTable = document.getElementById('cowTable');
+    const searchSpinner = document.getElementById('searchSpinner');
+    let searchTimeout;
+
+    searchInput.addEventListener('input', function(e) {
+        // Show spinner
+        searchSpinner.classList.remove('d-none');
+        
+        // Clear previous timeout
+        clearTimeout(searchTimeout);
+        
+        // Set new timeout to prevent too many searches while typing
+        searchTimeout = setTimeout(() => {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = cowTable.getElementsByTagName('tr');
+
+            for (let row of rows) {
+                const cells = row.getElementsByTagName('td');
+                let found = false;
+                
+                // Search through each cell in the row
+                for (let cell of cells) {
+                    const text = cell.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                // Show/hide row based on search
+                row.style.display = found ? '' : 'none';
+            }
+
+            // Hide spinner after search completes
+            searchSpinner.classList.add('d-none');
+        }, 300); // 300ms delay
+    });
+});
+</script>
+{% endblock extra_js %}
         
     

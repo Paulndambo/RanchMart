@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from shop.models import Animal, Category
+from django.db.models import Q
 # Create your views here.
 
 def animals(request):
@@ -17,8 +18,16 @@ def animal_detail(request, animal_id):
 @login_required
 def cow_list(request):
     user = request.user
-    cows = Animal.objects.all()
+    search_query = request.GET.get('search', '')
     categories = Category.objects.all()
+    
+    cows = Animal.objects.all()
+    
+    if search_query:
+        cows = cows.filter(
+            Q(name__icontains=search_query) |
+            Q(species__icontains=search_query) 
+        )
     if not user.is_superuser:
         cows = Animal.objects.filter(owner=user)
 

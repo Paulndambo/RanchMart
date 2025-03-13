@@ -11,11 +11,13 @@
                 <div class="col-md-3">
                     <label for="start_date" class="form-label">Start Date</label>
                     <input type="date" class="form-control" id="start_date" name="start_date" 
+                           max="{{ today|date:'Y-m-d' }}"
                            value="{% if start_date %}{{ start_date|date:'Y-m-d' }}{% endif %}">
                 </div>
                 <div class="col-md-3">
                     <label for="end_date" class="form-label">End Date</label>
                     <input type="date" class="form-control" id="end_date" name="end_date"
+                           max="{{ today|date:'Y-m-d' }}"
                            value="{% if end_date %}{{ end_date|date:'Y-m-d' }}{% endif %}">
                 </div>
                 <div class="col-md-3">
@@ -84,3 +86,27 @@
     </div>
 </div>
 {% endblock %}
+
+{% block additional_js %}
+<script>
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Get the date input elements
+    const startDate = document.getElementById('start_date');
+    const endDate = document.getElementById('end_date');
+    
+    // Set max attribute and add event listeners
+    startDate.max = today;
+    endDate.max = today;
+    
+    // Ensure end date is not before start date
+    startDate.addEventListener('change', function() {
+        endDate.min = this.value;
+    });
+    
+    endDate.addEventListener('change', function() {
+        startDate.max = this.value || today;
+    });
+</script>
+{% endblock additional_js%}

@@ -10,12 +10,12 @@
             <div class="col-md-3">
                 <label for="start_date" class="form-label">Start Date</label>
                 <input type="date" class="form-control" id="start_date" name="start_date" 
-                       value="{{ start_date|date:'Y-m-d'|default:'' }}">
+                       value="{{ start_date|date:'Y-m-d'|default:'' }}" max="">
             </div>
             <div class="col-md-3">
                 <label for="end_date" class="form-label">End Date</label>
                 <input type="date" class="form-control" id="end_date" name="end_date"
-                       value="{{ end_date|date:'Y-m-d'|default:'' }}">
+                       value="{{ end_date|date:'Y-m-d'|default:'' }}" max="">
             </div>
             <div class="col-md-3">
                 <label for="status" class="form-label">Status</label>
@@ -73,4 +73,20 @@
         </table>
     </div>
 </div>
+
+<script>
+    // Set max date to today for date inputs
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('start_date').max = today;
+    document.getElementById('end_date').max = today;
+    
+    // Ensure end_date is not before start_date
+    document.getElementById('start_date').addEventListener('change', function() {
+        document.getElementById('end_date').min = this.value;
+    });
+    
+    document.getElementById('end_date').addEventListener('change', function() {
+        document.getElementById('start_date').max = this.value;
+    });
+</script>
 {% endblock %}
