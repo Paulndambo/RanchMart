@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from decimal import Decimal
 from django.views.generic import ListView
 from django.db.models import Q
+from payments.paystack import PaystackIntegration
 
 from payments.models import Payment
 from orders.models import Order
@@ -186,3 +187,17 @@ class PaymentsListView(ListView):
             'status', flat=True).distinct()
         
         return context
+
+
+def paystack_callback(request):
+    reference = request.GET.get('reference')
+    paystack = PaystackIntegration()
+    order = paystack.verify_payment(reference)
+    if order:
+        return redirect(reverse('order-detail', args=[order.id]))
+    else:
+        return redirect(reverse('order-detail', args=[order.id]))
+
+def paystack_webhook(request):
+    pass
+

@@ -88,7 +88,7 @@
                                     </div>
                                     {% if cart.total_cost > 0 %}
                                         <a href="{% url 'checkout' cart.id %}" class="btn btn-success w-100">
-                                            Create Order <i class="bi bi-arrow-right ms-2"></i>
+                                            Proceed to Checkout <i class="bi bi-arrow-right ms-2"></i>
                                         </a>
                                     {% else %}
                                         <a href="{% url 'animals' %}" class="btn btn-primary w-100">

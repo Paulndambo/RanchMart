@@ -41,6 +41,9 @@ class Order(AbstractBaseModel):
     amount_paid = models.DecimalField(max_digits=100, decimal_places=2, default=0)
     status = models.CharField(max_length=255, choices=STATUS_CHOICES)
     receiver = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name='ordersreceiver', null=True, blank=True)
+    payment_reference = models.CharField(max_length=255, null=True, blank=True)
+    payment_method = models.CharField(max_length=255, null=True, blank=True)
+    payment_url = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username

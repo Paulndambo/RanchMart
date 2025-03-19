@@ -4,9 +4,10 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
-
+from payments.paystack import PaystackIntegration
 from orders.models import Cart, CartItem, Order, OrderItem
 from shop.models import Animal
+
 
 # Create your views here.
 # Orders Management
@@ -29,7 +30,8 @@ def orders(request):
 @login_required
 def add_to_cart(request, animal_id):
     animal = Animal.objects.get(id=animal_id)
-    cart = Cart.objects.get(user=request.user)
+    # This already creates a cart if it doesn't exist
+    cart, created = Cart.objects.get_or_create(user=request.user)
 
     # Get existing cart items
     existing_items = CartItem.objects.filter(cart=cart)
@@ -57,7 +59,8 @@ def add_to_cart_from_animal_detail(request):
         quantity = int(request.POST.get('quantity', 1))
         try:
             animal = Animal.objects.get(id=animal_id)
-            cart, _ = Cart.objects.get_or_create(user=request.user)
+            # This already creates a cart if it doesn't exist
+            cart, created = Cart.objects.get_or_create(user=request.user)
             
             # Get all existing items
             existing_items = CartItem.objects.filter(cart=cart)
@@ -126,21 +129,29 @@ def checkout(request, cart_id):
         user=request.user,
         total_cost=cart.total_cost,
         status="Pending",
-
     )
 
     for item in items:
-        OrderItem.objects.create(
+        order_item = OrderItem.objects.create(
             order=order,
             animal=item.animal,
             quantity=item.quantity
         )
-        item.order.receiver = item.animal.owner
-        item.order.save()
+        order_item.order.receiver = item.animal.owner
+        order_item.order.save()
 
     cart.delete()
-    messages.success(request, "Order placed successfully")
-    return redirect(reverse('order-detail', args=[order.id]))
+    total_amount = int(order.total_cost * 100)
+    paystack = PaystackIntegration()
+    authorization_url, reference = paystack.initiate_payment(total_amount, request.user.email)
+    if authorization_url:
+        order.payment_url = authorization_url
+        order.payment_reference = reference
+        order.save()
+        return redirect(authorization_url)
+    else:
+        messages.error(request, "Payment failed")
+        return redirect(reverse('order-detail', args=[order.id]))
    
 
 @login_required

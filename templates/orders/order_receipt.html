@@ -94,8 +94,8 @@
                     <tr>
                         <td>{{ item.animal.name }}</td>
                         <td>{{ item.quantity }}</td>
-                        <td>${{ item.animal.price }}</td>
-                        <td>${{ item.total_price }}</td>
+                        <td>KES.{{ item.animal.price }}</td>
+                        <td>KES.{{ item.total_price }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -103,11 +103,11 @@
         </div>
 
         <div class="receipt-total">
-            <p>Subtotal: ${{ order.total_cost }}</p>
+            <p>Subtotal: KES.{{ order.total_cost }}</p>
             {% if order.tax %}
-            <p>Tax: ${{ order.tax }}</p>
+            <p>Tax: KES.{{ order.tax }}</p>
             {% endif %}
-            <h4>Total: ${{ order.total_cost }}</h4>
+            <h4>Total: KES.{{ order.total_cost }}</h4>
         </div>
 
         <div class="receipt-footer">

@@ -60,7 +60,7 @@
                 <tr>
                     <td>{{ order.id }}</td>
                     <td>{{ order.user.first_name }} {{ order.user.last_name }}</td>
-                    <td>${{ order.total_cost }}</td>
+                    <td>KES.{{ order.total_cost }}</td>
                     <td>{{ order.created_at|date:"Y-m-d" }}</td>
                     <td>{{ order.status }}</td>
                 </tr>

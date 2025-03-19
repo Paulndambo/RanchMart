@@ -71,7 +71,7 @@
                     <td>{{ payment.id }}</td>
                     <td>{{ payment.order.id|default:'N/A' }}</td>
                     <td>{{ payment.order.user.first_name }} {{ payment.order.user.last_name }}</td>
-                    <td>${{ payment.amount }}</td>
+                    <td>KES.{{ payment.amount }}</td>
                     <td>{{ payment.payment_method }}</td>
                    
                     <td>{{ payment.created_at|date:"Y-m-d" }}</td>

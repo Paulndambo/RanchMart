@@ -16,7 +16,7 @@
                 <a href="{% url 'print-receipt' order.id %}" class="btn btn-warning">
                     <i class="fas fa-print"></i> Print Order
                 </a>
-                {% if order.remaining_balance > 0 %}
+                {% if order.status != 'Paid' %}
                     <a data-bs-toggle="modal" data-bs-target="#addPaymentModal{{ order.id }}" class="btn btn-success">
                         <i class="fas fa-money-bill"></i> Record Payment
                     </a>
