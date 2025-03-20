@@ -1,3 +1,4 @@
+from datetime import datetime
 from decimal import Decimal
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -189,3 +190,18 @@ def confirm_payment(request):
         order.save()
         return redirect(reverse('order-detail', args=[order_id]))
     return render(request, 'orders/confirm_payment.html')
+
+
+@login_required
+def orders_report(request):
+    generated_on = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    orders = Order.objects.all().order_by('-created_at')
+
+    summary = {
+        'total_orders': orders.count(),
+        'total_revenue': sum(order.total_cost for order in orders),
+        'average_order_value': sum(order.total_cost for order in orders) / orders.count()
+    }
+
+
+    return render(request, 'orders/order_report.html', {'orders': orders, 'generated_on': generated_on, 'summary': summary})

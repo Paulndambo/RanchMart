@@ -200,4 +200,3 @@ def paystack_callback(request):
 
 def paystack_webhook(request):
     pass
-
