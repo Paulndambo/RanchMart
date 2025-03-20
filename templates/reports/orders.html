@@ -35,10 +35,15 @@
                 <a href="{% url 'sales-report' %}" class="btn btn-secondary me-2">
                     <i class="fas fa-refresh"></i>
                 </a>
+                <a href="{% url 'orders-report' %}" class="btn btn-secondary me-2">
+                    <i class="fas fa-file-alt"></i>
+                </a>
+                <!--
                 <a href="?export=csv{% if start_date %}&start_date={{ start_date|date:'Y-m-d' }}{% endif %}{% if end_date %}&end_date={{ end_date|date:'Y-m-d' }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}" 
                    class="btn btn-success">
                     <i class="fas fa-file-csv"></i>
                 </a>
+                -->
             </div>
         </div>
     </form>

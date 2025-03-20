@@ -39,11 +39,12 @@ class PaystackIntegration:
             data = response.json()
             
             if data["data"]["status"] == "success": 
+                payment_method = data["data"]["authorization"]["bank"]
                 order = Order.objects.get(payment_reference=reference)
-                order.payment_url = data["data"]["authorization"]
+                order.payment_method = payment_method
                 order.status = "Paid"
                 order.save()
-                Payment.objects.create(order=order, amount=order.total_cost, payment_method=data["data"]["authorization"])
+                Payment.objects.create(order=order, amount=order.total_cost, payment_method=payment_method)
                 return order
             else:
                 return None
