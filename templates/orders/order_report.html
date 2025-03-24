@@ -100,11 +100,11 @@
             const element = document.getElementById('report-content');
             
             const opt = {
-                margin: 10,
+                margin: 5,
                 filename: 'order_report_{{ generated_on|date:"Y-m-d" }}.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                jsPDF: { unit: 'mm', format: 'a3', orientation: 'landscape' }
             };
             
             html2pdf().from(element).set(opt).save().then(function() {
