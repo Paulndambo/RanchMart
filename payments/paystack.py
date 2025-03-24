@@ -5,7 +5,7 @@ class PaystackIntegration:
     BASE_URL = "https://api.paystack.co"
 
     def __init__(self):
-        self.secret_key = "sk_test_aac883149953639077db21cf2d96590e04829777"
+        self.secret_key = "sk_live_56b1c9c2beab740d129155eba12c45c37d3f8faa"
 
     def initiate_payment(self, amount, email):
         url = f"{self.BASE_URL}/transaction/initialize"
