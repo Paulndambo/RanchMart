@@ -197,10 +197,13 @@ def orders_report(request):
     generated_on = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     orders = Order.objects.all().order_by('-created_at')
 
+    orders_average = sum(order.total_cost for order in orders) / orders.count()
+    total_revenue = sum(order.total_cost for order in orders)
+
     summary = {
         'total_orders': orders.count(),
-        'total_revenue': sum(order.total_cost for order in orders),
-        'average_order_value': sum(order.total_cost for order in orders) / orders.count()
+        'total_revenue': round(total_revenue, 2),
+        'average_order_value': round(orders_average, 2)
     }
 
 
